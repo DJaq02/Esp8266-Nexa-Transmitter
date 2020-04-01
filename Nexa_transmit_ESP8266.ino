@@ -38,7 +38,7 @@ void setup() {
   digitalWrite(LED_PIN, HIGH);
   Serial.begin(115200);
   delay(10);
-  WiFi.hostname("Esp Nexa Talli");
+  WiFi.hostname("Esp Nexa Transmitter");
   // Connect to WiFi network
   Serial.print("Connecting to ");
   Serial.println(ssid);
@@ -107,7 +107,7 @@ void ParseString(String Incoming)
         int pos22 = newString.indexOf('H');
         newString2 = newString.substring(0, pos22);
         newString2.replace(" ", "");
-        Serial.println("Uusi yhteys:");
+        Serial.println("New connection:");
         Serial.println(newString2);
         int Index2 = newString2.indexOf(',', 0);
         int Index3 = newString2.indexOf(',', Index2+1);
@@ -137,11 +137,11 @@ void ParseString(String Incoming)
         s += "<br />Address" + thirdValue;
         s += "<br />Dim Value:" + fourthValue;
         s += "<br />Transmit repeated:" + fifthValue;
-                                              //                           Datan järjestys on <Moodi>,<Nappi(0-15)>,<Kauko-ohjaimen koodi>,<Himmennys taso>
-        if(Mode == "On")                      //                           Esimerkiksi On,0,10646597,0 Tai Off,0,10646597,0 himmennettäessä Dim,1,10646597,7 tai DimOff,1,10646597,0 Himmennys arvo on 0-15
-        {                                     //                           Jos haluat opettaa uuden kaukosäädin koodin Kirjoita (Teach,"0-15","8 numeroinen koodi",0) eli (Teach,0,12345678,0)
-          if(useAmp)
-          {
+                                              //                           Url command order is <Mode>,<Button/Unit(0-15)>,<Controller code>,<Dim level>,<Transmit repeat times>
+        if(Mode == "On")                      //                           Example On,0,10646597,0,4 Or Off,0,10646597,0,4 When dimming Dim,1,10646597,7,4 Or DimOff,1,10646597,0,4 Dimming level is 0-15
+        {                                     //                           If you want to teach new switch or dimmer use (Teach,"0-15","8 number code",0) = (Teach,0,12345678,0)
+          if(useAmp)                          //                           Its better to use random 8 digit number as code for controller address because if you use 12345678
+          {                                   //                           there is a chance that someone else has the same code
             digitalWrite(AMP_PIN, LOW);
             delay(100);
           }
